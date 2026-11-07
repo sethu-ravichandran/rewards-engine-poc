@@ -3,7 +3,11 @@
 Given a payment and the cards a person holds, pick the card that earns the most and say why. Rules and offers are illustrative until verified against the issuer.
 This is the decision at the heart of Scruge's four agents (**Checkout, Card, Tap, UPI**), built as a working service and app.
 
-**Try it in 60 seconds** (`pip install -r requirements-dev.txt && uvicorn scruge.api:app`, open http://127.0.0.1:8000):
+**Live demo: https://rewards-engine-poc.vercel.app/**
+
+![Demo: pick a payment, compare the four agents, run a month of spends](assets/demo.gif)
+
+**Try it in 60 seconds** (or run it yourself: `pip install -r requirements-dev.txt && uvicorn scruge.api:app`, open http://127.0.0.1:8000):
 
 1. Pick **Amazon**, set **₹6,000**. The *Four agents* panel shows each agent's choice and a one-line reason. Checkout picks Swiggy HDFC for ₹900
    ("5.00% rewards + 10.00% offer = 15.00% total"); Card and Tap say Amazon is online-only; UPI picks the only RuPay card. Switch to **DMart** at ₹4,000: Card and Tap

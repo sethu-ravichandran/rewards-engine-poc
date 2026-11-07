@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import csv
 import io
+import os
 import re
 from datetime import datetime, timezone
 
@@ -42,6 +43,8 @@ def register_user_routes(app: FastAPI, cfg, catalog, offers: dict, users, P: Pre
     @app.get("/api/users/{uid}/state")
     async def user_state(uid: str, cycle: str | None = None) -> Response:
         valid_uid(uid); cyc = valid_cycle(cycle)
+        if cfg.stateless or os.environ.get("VERCEL"):      # several server copies would each hold different data
+            raise HTTPException(404, "per-user storage is off in this deployment")
 
         def read():
             ledger = users.get_ledger(uid, cyc)

@@ -54,3 +54,11 @@ def test_two_devices_one_cap_never_exceed_it(make_client):
         b.update(user_id="seq_user_001", txn_ref=f"seq{i:05d}")
         seq += c2.post("/api/commit", json=b).json()["best"]["reward_paise"]
     assert rewards == seq
+
+
+def test_stateless_deployment_has_no_user_state(make_client, monkeypatch):
+    monkeypatch.setenv("VERCEL", "1")
+    c = make_client()
+    assert c.get("/api/users/stateless_user1/state").status_code == 404
+    b = body(wallet=["sbi_cashback"], amount=1000)                  # the stateless engine routes still work
+    assert c.post("/api/optimize", json=b).status_code == 200

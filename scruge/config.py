@@ -26,6 +26,7 @@ class Settings:
     # offers, planner, per-user store
     offers_path: str = ""                  # OFFERS_PATH (default: data/offers.json)
     user_db: str = ""                      # USER_DB: SQLite file for wallets/usage/ledger (default: data/users.sqlite3; ':memory:' ok)
+    stateless: bool = False                # STATELESS: no per-user storage; the UI keeps its own state (set automatically on Vercel)
     plan_max_txns: int = 30                # PLAN_MAX_TXNS
     plan_node_budget: int = 150_000        # PLAN_NODE_BUDGET (search nodes before the planner returns its best so far)
     # request limits
