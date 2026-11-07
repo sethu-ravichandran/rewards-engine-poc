@@ -1,0 +1,11 @@
+{
+  "_note": "Illustrative prices for the same product on different marketplaces. NOT live prices. The point of the demo: the cheapest sticker price is not always the cheapest after your card reward and the bank offer, so each listing is run through the same engine.",
+  "items": [
+    {"id": "headphones", "name": "Wireless noise-cancelling headphones",
+     "listings": [{"merchant": "amazon", "price_paise": 2699000}, {"merchant": "flipkart", "price_paise": 2649900}, {"merchant": "croma", "price_paise": 2749000}]},
+    {"id": "sneakers", "name": "Running shoes",
+     "listings": [{"merchant": "myntra", "price_paise": 599900}, {"merchant": "amazon", "price_paise": 579900}, {"merchant": "flipkart", "price_paise": 569900}]},
+    {"id": "groceries", "name": "Monthly grocery basket",
+     "listings": [{"merchant": "bigbasket", "price_paise": 650000}, {"merchant": "amazon", "price_paise": 642000}]}
+  ]
+}

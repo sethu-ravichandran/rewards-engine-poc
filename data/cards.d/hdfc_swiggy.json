@@ -1,0 +1,60 @@
+{
+  "id": "hdfc_swiggy",
+  "name": "Swiggy HDFC",
+  "network": "mastercard",
+  "base_rate_bps": 100,
+  "rules": [
+    {
+      "id": "swiggy_10pct",
+      "rate_bps": 1000,
+      "merchants": [
+        "swiggy"
+      ],
+      "cap_paise": 150000,
+      "cap_bucket": "swiggy"
+    },
+    {
+      "id": "online_cat_5pct",
+      "rate_bps": 500,
+      "channels": [
+        "online"
+      ],
+      "categories": [
+        "apparel",
+        "electronics",
+        "department_store",
+        "entertainment",
+        "digital",
+        "pharmacy",
+        "cab",
+        "general_retail"
+      ],
+      "cap_paise": 150000,
+      "cap_bucket": "online_5"
+    }
+  ],
+  "excluded_categories": [
+    "fuel",
+    "rent",
+    "wallet",
+    "quasi_cash",
+    "jewellery",
+    "government",
+    "education"
+  ],
+  "surcharge_bps": {
+    "fuel": 100,
+    "rent": 100
+  },
+  "surcharge_waiver": {
+    "fuel": [
+      40000,
+      500000
+    ]
+  },
+  "source": "https://www.hdfc.bank.in/credit-cards/swiggy-hdfc-bank-credit-card",
+  "source_note": "Headline rates checked against the issuer page on 2026-11-07: 10% on Swiggy, 5% on online spends, 1% on everything else. NOT found on the readable part of that page: monthly caps, exclusions, fuel surcharge, fee, MITC. The caps and exclusions here are therefore assumptions, so this card stays illustrative.",
+  "verified_on": null,
+  "confidence": "illustrative",
+  "display_order": 30
+}

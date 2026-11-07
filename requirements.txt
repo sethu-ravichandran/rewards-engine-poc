@@ -1,0 +1,7 @@
+# Runtime. Pinned to the versions this project was developed and benchmarked with.
+fastapi==0.116.1
+starlette==0.47.2
+pydantic==2.11.7
+uvicorn==0.35.0
+uvloop==0.21.0
+httptools==0.6.4

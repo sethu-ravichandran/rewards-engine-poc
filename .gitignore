@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+
+# Tools
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Local data and releases (rules in data/cards.d, data/cards.json, data/offers.json and data/prices.json are tracked)
+data/*.sqlite3*
+data/releases/
+
+# Secrets and logs
+.env
+.env.*
+*.log
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp

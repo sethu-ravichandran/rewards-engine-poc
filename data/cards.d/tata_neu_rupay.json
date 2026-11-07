@@ -1,0 +1,76 @@
+{
+  "id": "tata_neu_rupay",
+  "name": "Tata Neu Infinity (RuPay)",
+  "network": "rupay",
+  "base_rate_bps": 50,
+  "supported_channels": [
+    "online",
+    "card",
+    "tap",
+    "upi"
+  ],
+  "rules": [
+    {
+      "id": "neu_5pct",
+      "rate_bps": 500,
+      "merchants": [
+        "bigbasket",
+        "croma",
+        "tata_cliq",
+        "1mg",
+        "air_india"
+      ],
+      "channels": [
+        "online",
+        "card",
+        "tap"
+      ]
+    },
+    {
+      "id": "non_upi_1_5",
+      "rate_bps": 150,
+      "channels": [
+        "online",
+        "card",
+        "tap"
+      ]
+    },
+    {
+      "id": "upi_neu",
+      "rate_bps": 150,
+      "channels": [
+        "upi"
+      ],
+      "merchants": [
+        "bigbasket",
+        "croma",
+        "tata_cliq",
+        "1mg"
+      ],
+      "cap_paise": 50000,
+      "cap_bucket": "upi"
+    }
+  ],
+  "excluded_categories": [
+    "rent",
+    "wallet",
+    "quasi_cash",
+    "government",
+    "fuel"
+  ],
+  "surcharge_bps": {
+    "fuel": 100,
+    "rent": 100
+  },
+  "surcharge_waiver": {
+    "fuel": [
+      40000,
+      500000
+    ]
+  },
+  "source": "https://www.hdfc.bank.in/credit-cards/tata-neu-infinity-hdfc-bank-credit-card",
+  "source_note": "Card design checked on the issuer page. The issuer page says 1.5% applies to non-UPI spends, so UPI earns less (modelled as a 0.5% base). Rates are otherwise an approximation, not read from the T&Cs.",
+  "verified_on": null,
+  "confidence": "illustrative",
+  "display_order": 50
+}

@@ -1,0 +1,271 @@
+{
+  "cards": [
+    {
+      "id": "sbi_cashback",
+      "name": "SBI Cashback",
+      "network": "visa",
+      "base_rate_bps": 100,
+      "rules": [
+        {
+          "id": "online_5pct",
+          "rate_bps": 500,
+          "channels": [
+            "online"
+          ],
+          "cap_paise": 500000,
+          "cap_bucket": "cashback_total"
+        }
+      ],
+      "excluded_categories": [
+        "fuel",
+        "rent",
+        "wallet",
+        "quasi_cash",
+        "education",
+        "utilities",
+        "insurance",
+        "jewellery",
+        "government",
+        "rail"
+      ],
+      "surcharge_bps": {
+        "fuel": 100,
+        "rent": 100
+      },
+      "surcharge_waiver": {
+        "fuel": [
+          50000,
+          500000
+        ]
+      },
+      "source": "https://www.sbicard.com/en/personal/credit-cards/rewards/cashback-sbi-card.page",
+      "source_note": "Card design checked on the issuer page. Reward rates are an approximation, not read from the T&Cs.",
+      "verified_on": null,
+      "confidence": "illustrative",
+      "display_order": 10
+    },
+    {
+      "id": "amazon_icici",
+      "name": "Amazon Pay ICICI",
+      "network": "visa",
+      "base_rate_bps": 100,
+      "rules": [
+        {
+          "id": "amazon_5pct",
+          "rate_bps": 500,
+          "merchants": [
+            "amazon"
+          ]
+        },
+        {
+          "id": "partner_2pct",
+          "rate_bps": 200,
+          "merchants": [
+            "swiggy",
+            "bookmyshow",
+            "cleartrip"
+          ]
+        }
+      ],
+      "excluded_categories": [
+        "fuel",
+        "wallet",
+        "quasi_cash",
+        "jewellery",
+        "rent",
+        "government"
+      ],
+      "surcharge_bps": {
+        "fuel": 100,
+        "rent": 100
+      },
+      "surcharge_waiver": {
+        "fuel": [
+          40000,
+          400000
+        ]
+      },
+      "source": "https://www.icici.bank.in/personal-banking/cards/credit-card/amazon-pay-credit-card",
+      "source_note": "Card design checked on the issuer page. Reward rates are an approximation, not read from the T&Cs.",
+      "verified_on": null,
+      "confidence": "illustrative",
+      "display_order": 20
+    },
+    {
+      "id": "hdfc_swiggy",
+      "name": "Swiggy HDFC",
+      "network": "mastercard",
+      "base_rate_bps": 100,
+      "rules": [
+        {
+          "id": "swiggy_10pct",
+          "rate_bps": 1000,
+          "merchants": [
+            "swiggy"
+          ],
+          "cap_paise": 150000,
+          "cap_bucket": "swiggy"
+        },
+        {
+          "id": "online_cat_5pct",
+          "rate_bps": 500,
+          "channels": [
+            "online"
+          ],
+          "categories": [
+            "apparel",
+            "electronics",
+            "department_store",
+            "entertainment",
+            "digital",
+            "pharmacy",
+            "cab",
+            "general_retail"
+          ],
+          "cap_paise": 150000,
+          "cap_bucket": "online_5"
+        }
+      ],
+      "excluded_categories": [
+        "fuel",
+        "rent",
+        "wallet",
+        "quasi_cash",
+        "jewellery",
+        "government",
+        "education"
+      ],
+      "surcharge_bps": {
+        "fuel": 100,
+        "rent": 100
+      },
+      "surcharge_waiver": {
+        "fuel": [
+          40000,
+          500000
+        ]
+      },
+      "source": "https://www.hdfc.bank.in/credit-cards/swiggy-hdfc-bank-credit-card",
+      "source_note": "Headline rates checked against the issuer page on 2026-11-07: 10% on Swiggy, 5% on online spends, 1% on everything else. NOT found on the readable part of that page: monthly caps, exclusions, fuel surcharge, fee, MITC. The caps and exclusions here are therefore assumptions, so this card stays illustrative.",
+      "verified_on": null,
+      "confidence": "illustrative",
+      "display_order": 30
+    },
+    {
+      "id": "hdfc_infinia",
+      "name": "HDFC Infinia",
+      "network": "diners",
+      "base_rate_bps": 330,
+      "rules": [
+        {
+          "id": "smartbuy_hotel",
+          "rate_bps": 1650,
+          "merchants": [
+            "smartbuy_hotels"
+          ],
+          "cap_paise": 1500000,
+          "cap_bucket": "smartbuy"
+        }
+      ],
+      "excluded_categories": [
+        "fuel",
+        "rent",
+        "wallet",
+        "quasi_cash",
+        "government"
+      ],
+      "surcharge_bps": {
+        "fuel": 100,
+        "rent": 100
+      },
+      "surcharge_waiver": {
+        "fuel": [
+          40000,
+          500000
+        ]
+      },
+      "source": "https://www.hdfc.bank.in/credit-cards/infinia-credit-card",
+      "source_note": "Card design checked on the issuer page. Reward rates are an approximation, not read from the T&Cs.",
+      "verified_on": null,
+      "confidence": "illustrative",
+      "display_order": 40
+    },
+    {
+      "id": "tata_neu_rupay",
+      "name": "Tata Neu Infinity (RuPay)",
+      "network": "rupay",
+      "base_rate_bps": 50,
+      "supported_channels": [
+        "online",
+        "card",
+        "tap",
+        "upi"
+      ],
+      "rules": [
+        {
+          "id": "neu_5pct",
+          "rate_bps": 500,
+          "merchants": [
+            "bigbasket",
+            "croma",
+            "tata_cliq",
+            "1mg",
+            "air_india"
+          ],
+          "channels": [
+            "online",
+            "card",
+            "tap"
+          ]
+        },
+        {
+          "id": "non_upi_1_5",
+          "rate_bps": 150,
+          "channels": [
+            "online",
+            "card",
+            "tap"
+          ]
+        },
+        {
+          "id": "upi_neu",
+          "rate_bps": 150,
+          "channels": [
+            "upi"
+          ],
+          "merchants": [
+            "bigbasket",
+            "croma",
+            "tata_cliq",
+            "1mg"
+          ],
+          "cap_paise": 50000,
+          "cap_bucket": "upi"
+        }
+      ],
+      "excluded_categories": [
+        "rent",
+        "wallet",
+        "quasi_cash",
+        "government",
+        "fuel"
+      ],
+      "surcharge_bps": {
+        "fuel": 100,
+        "rent": 100
+      },
+      "surcharge_waiver": {
+        "fuel": [
+          40000,
+          500000
+        ]
+      },
+      "source": "https://www.hdfc.bank.in/credit-cards/tata-neu-infinity-hdfc-bank-credit-card",
+      "source_note": "Card design checked on the issuer page. The issuer page says 1.5% applies to non-UPI spends, so UPI earns less (modelled as a 0.5% base). Rates are otherwise an approximation, not read from the T&Cs.",
+      "verified_on": null,
+      "confidence": "illustrative",
+      "display_order": 50
+    }
+  ],
+  "_note": "Illustrative rules modelled on popular Indian cards. Simplified and approximate; not issuer-verified. Rates are effective rupee value in basis points (100 bps = 1%). Caps are reward value per statement cycle in paise."
+}
