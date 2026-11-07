@@ -15,6 +15,7 @@ import hashlib
 import hmac
 import json
 import logging
+import os
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
@@ -77,7 +78,9 @@ def create_app(settings: Settings | None = None, rules_path: str | Path | None =
     catalog = CatalogStore(rules_path or cfg.rules_path or DEFAULT_PATH, cfg.rules_watch_interval_s)
     offers_path = Path(cfg.offers_path) if cfg.offers_path else DEFAULT_OFFERS_PATH
     offers: dict[str, OfferBook] = {"book": OfferBook.load(offers_path)}      # a holder: a reload swaps the book atomically
-    users = UserStore(cfg.user_db or Path(__file__).resolve().parent.parent / "data" / "users.sqlite3")
+    # a serverless filesystem is read-only, so on Vercel the user store lives in memory
+    default_db = ":memory:" if os.environ.get("VERCEL") else Path(__file__).resolve().parent.parent / "data" / "users.sqlite3"
+    users = UserStore(cfg.user_db or default_db)
     P = Presenter(cfg, offers)
 
     app = FastAPI(title="Scruge Rewards Optimizer (PoC)")
