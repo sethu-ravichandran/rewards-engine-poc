@@ -1,11 +1,14 @@
-# SC₹UGE: pay with the card, UPI route or offer that keeps the most rupees (proof of work)
+**Unofficial proof of work by Sethu Ravichandran.** Not an official Scruge product and not affiliated with Scruge.
 
-Given a payment and the cards a person holds, pick the card that earns the most and say why. Rules and offers are illustrative until verified against the issuer.
-This is the decision at the heart of Scruge's four agents (**Checkout, Card, Tap, UPI**), built as a working service and app.
+# Best-card engine: the right card, UPI route or offer for every payment
 
-**Live demo: https://rewards-engine-poc.vercel.app/**
+1. **What it does:** given a payment and the cards someone holds, it picks the card (or UPI route, or offer) that keeps the most rupees and says why. Money is integer paise throughout, and 212 tests check it.
+2. **Most interesting result:** planning a month of 22 payments together beats paying one at a time by **₹500.80** (₹10,415.75 vs ₹9,914.95), because a scarce cap is saved for the payment that earns most from it. The search is exhaustive.
+3. **Try it:** **https://rewards-engine-poc.vercel.app/**
 
 ![Demo: pick a payment, compare the four agents, run a month of spends](assets/demo.gif)
+
+Rules and offers are illustrative until verified against the issuer. The decision follows Scruge's four agents (**Checkout, Card, Tap, UPI**), built as a working service and app.
 
 **Try it in 60 seconds** (or run it yourself: `pip install -r requirements-dev.txt && uvicorn scruge.api:app`, open http://127.0.0.1:8000):
 
