@@ -1,18 +1,51 @@
-**Unofficial proof of work by Sethu Ravichandran.** Not an official Scruge product and not affiliated with Scruge.
-
 # Best-card engine: the right card, UPI route or offer for every payment
+
+*A proof of work by Sethu Ravichandran, backend engineer.*
 
 1. **What it does:** given a payment and the cards someone holds, it picks the card (or UPI route, or offer) that keeps the most rupees and says why. Money is integer paise throughout, and 212 tests check it.
 2. **Most interesting result:** planning a month of 22 payments together beats paying one at a time by **₹500.80** (₹10,415.75 vs ₹9,914.95), because a scarce cap is saved for the payment that earns most from it. The search is exhaustive.
 3. **Try it:** **https://rewards-engine-poc.vercel.app/**
 
-![Demo: pick a payment, compare the four agents, run a month of spends](assets/demo.gif)
+![Demo: pick a payment, compare the four ways to pay, run a month of spends](assets/demo.gif)
 
-Rules and offers are illustrative until verified against the issuer. The decision follows Scruge's four agents (**Checkout, Card, Tap, UPI**), built as a working service and app.
+Rules and offers are illustrative until verified against the issuer (see [Known simplifications](#known-simplifications-and-what-i-would-do-next)).
 
-**Try it in 60 seconds** (or run it yourself: `pip install -r requirements-dev.txt && uvicorn scruge.api:app`, open http://127.0.0.1:8000):
+## The fintech problem it takes on
 
-1. Pick **Amazon**, set **₹6,000**. The *Four agents* panel shows each agent's choice and a one-line reason. Checkout picks Swiggy HDFC for ₹900
+Choosing a card is not "highest cashback wins". The real answer depends on how Indian card rewards actually work, and each of these is modelled:
+
+- **Reward rules** that match by merchant, then MCC, then category, then channel, with a base rate underneath.
+- **Monthly caps** per rule or shared bucket, where spend above the cap earns only the base rate, so a payment today changes what the next one earns.
+- **Exclusions and fees:** categories such as fuel, rent, wallet loads, insurance and utilities earn nothing on the cards that exclude them; fuel surcharges apply unless the fill is inside a waiver band; rent on a card is a fee with no reward.
+- **Channel facts:** UPI only works with RuPay credit cards, online-only merchants cannot be tapped, and contactless above ₹5,000 needs a PIN.
+- **Offers are not rewards:** an instant discount has its own per-payment cap, minimum order and per-user monthly limit, and a voucher purchase earns no card reward.
+- **Trust:** a recommendation is only worth anything if the bank credits what was promised, so the ledger stores each prediction and reconciliation checks it against the statement.
+
+## What it demonstrates
+
+| Area | What is built |
+|---|---|
+| **Money correctness** | Integer paise end to end, floor rounding like issuers, a rejection when two amount fields disagree, bounds on every numeric field, and a differential test that pins the engine to a frozen copy of itself on ~16,000 random cases. |
+| **Ledger and idempotency** | A commit writes cap usage and the ledger row in one transaction. Retrying a `txn_ref` returns the stored result and applies nothing twice; the same `txn_ref` with a different body is a 409. Concurrent commits for one user never exceed a cap (tested with 16 writers). |
+| **Reconciliation** | Compares predicted and credited rewards, diagnoses which rate the issuer probably applied (base rate, another rule, zero, or an earlier cap), drafts a dispute note, and imports a CSV statement with per-line errors. |
+| **Rule governance** | Rules are data: per-card files, `lint`, `diff` with a human review gate for large changes, atomic `publish`, hash-verified `rollback`, an audit history, and effective-dated rules so a mid-cycle rate change prices each payment correctly. |
+| **Optimisation** | A cap-aware planner (branch and bound, never worse than greedy, says whether it finished) fed by a forecast built from the user's own history. |
+| **Product sense** | A route comparison (Checkout, Card, Tap, UPI, including a plain bank account on UPI) and a price comparison across stores, ranked by price after reward and offer. |
+| **Operations** | Request ids, timing, a JSON access log, health probes, rules hot-reload, and a request that costs about 100 µs in-process. |
+
+```
+client ──> FastAPI: validate, paise only ──> presenter: offers + channel rules over the engine's ranking
+                                                  │
+              engine (pure function) <────────────┤──> planner <── forecast <── ledger
+                                                  │
+              commit: usage + ledger in one transaction (SQLite) ──> reconcile <── issuer statement
+```
+
+## Try it in 60 seconds
+
+(Or run it yourself: `pip install -r requirements-dev.txt && uvicorn rewards_engine.api:app`, open http://127.0.0.1:8000):
+
+1. Pick **Amazon**, set **₹6,000**. The *Four ways to pay* panel shows each route's choice and a one-line reason. Checkout picks Swiggy HDFC for ₹900
    ("5.00% rewards + 10.00% offer = 15.00% total"); Card and Tap say Amazon is online-only; UPI picks the only RuPay card. Switch to **DMart** at ₹4,000: Card and Tap
    both pick Infinia, but Tap is worth ₹200 more because of an in-store tap offer. Above ₹5,000 a tap needs a PIN, so the app sends you to Card.
 2. Pick **Petrol pump** at ₹6,000: every card loses ₹60 to the fuel surcharge, and the app says so and tells you to split it into two payments (the surcharge is waived per payment inside a band).
@@ -21,21 +54,21 @@ Rules and offers are illustrative until verified against the issuer. The decisio
    (festive shopping in the middle) it would have gained **₹500.80**. The search is exhaustive when it finishes within its node budget, and every answer says whether it did (`optimal`); here it did. The note counts the payments in *this run*, and the rewards and offer savings are shown separately, because a discount is not an issuer reward. **Plan ahead** forecasts the rest of your month from your own history (with its confidence stated), or plans an example of five festive payments
    (+₹425) when you have none. With a few payments in, the verdict also shows a **Planner tip** when holding a card's cap for later is better.
 4. Press **Check credits (demo)**. A simulated issuer statement credits one payment at the base rate; the app finds the shortfall, says which rule the issuer probably applied, and drafts the dispute note.
-5. Refresh the page. Your wallet, cap usage and payments are still there (saved server-side per browser).
+5. Run locally and refresh the page: your wallet, cap usage and payments are still there (saved per browser). The hosted demo keeps them in the open tab only, so a refresh starts over.
 
 ## What is in it
 
 | Piece | What it does | Where |
 |---|---|---|
-| **Engine** | Rules matched by merchant > MCC > category > channel; per-cycle caps (overflow earns base rate); exclusions; surcharges with waiver windows; channel rules (UPI is RuPay-only); an explanation for every result | `scruge/engine.py`, `models.py` |
-| **Offers** | Instant discounts (bank offers, vouchers) with a per-payment cap, a minimum order and a **per-user per-cycle limit** (tracked in the ledger, so the sixth ₹90 voucher is the last full one and the eighth pays nothing), online or in-store-tap. Kept *outside* the engine so reward maths and its tests are untouched, and so predicted rewards stay comparable to what the issuer credits | `scruge/offers.py`, `data/offers.json` |
-| **Channel rules + guidance** | Online-only merchants cannot be tapped or swiped; contactless above ₹5,000 needs a PIN; in-store tap offers make Tap different from Card; a payment that loses money gets advice (split a petrol fill into the waiver band, use a bank transfer for rent). Opt-in (`channel_rules`), outside the engine | `scruge/channels.py` |
-| **Lookahead planner** | Chooses cards for a *sequence* of payments so scarce caps are saved for where they pay most. Exact branch-and-bound that starts from greedy, so it is never worse, and says whether it finished | `scruge/planner.py` |
-| **Forecast** | Predicts the rest of the cycle from the user's own ledger (recurring merchant / channel patterns, typical amounts), with a stated confidence, so the planner needs no input from the caller | `scruge/forecast.py` |
-| **Reward reconciliation** | Compares the reward we predicted with what the issuer credited; classifies each payment, diagnoses which rate the issuer probably applied, drafts a dispute note | `scruge/reconcile.py` |
-| **Rules pipeline** | `build / lint / diff / publish / rollback / history` CLI with a review gate and content-addressed releases | `scruge/rules.py` |
-| **Per-user state** | Wallet, cap usage per statement cycle and a payments ledger in SQLite; atomic, idempotent commits | `scruge/userstore.py` |
-| **App** | The UI: wallet, four agents, 3D best-card, ranked cards with reasons, caps, payments, planner and reconciliation demos | `web/index.html` |
+| **Engine** | Rules matched by merchant > MCC > category > channel; per-cycle caps (overflow earns base rate); exclusions; surcharges with waiver windows; channel rules (UPI is RuPay-only); an explanation for every result | `rewards_engine/engine.py`, `models.py` |
+| **Offers** | Instant discounts (bank offers, vouchers) with a per-payment cap, a minimum order and a **per-user per-cycle limit** (tracked in the ledger, so the sixth ₹90 voucher is the last full one and the eighth pays nothing), online or in-store-tap. Kept *outside* the engine so reward maths and its tests are untouched, and so predicted rewards stay comparable to what the issuer credits | `rewards_engine/offers.py`, `data/offers.json` |
+| **Channel rules + guidance** | Online-only merchants cannot be tapped or swiped; contactless above ₹5,000 needs a PIN; in-store tap offers make Tap different from Card; a payment that loses money gets advice (split a petrol fill into the waiver band, use a bank transfer for rent). Opt-in (`channel_rules`), outside the engine | `rewards_engine/channels.py` |
+| **Lookahead planner** | Chooses cards for a *sequence* of payments so scarce caps are saved for where they pay most. Exact branch-and-bound that starts from greedy, so it is never worse, and says whether it finished | `rewards_engine/planner.py` |
+| **Forecast** | Predicts the rest of the cycle from the user's own ledger (recurring merchant / channel patterns, typical amounts), with a stated confidence, so the planner needs no input from the caller | `rewards_engine/forecast.py` |
+| **Reward reconciliation** | Compares the reward we predicted with what the issuer credited; classifies each payment, diagnoses which rate the issuer probably applied, drafts a dispute note | `rewards_engine/reconcile.py` |
+| **Rules pipeline** | `build / lint / diff / publish / rollback / history` CLI with a review gate and content-addressed releases | `rewards_engine/rules.py` |
+| **Per-user state** | Wallet, cap usage per statement cycle and a payments ledger in SQLite; atomic, idempotent commits | `rewards_engine/userstore.py` |
+| **App** | The UI: wallet, four ways to pay, 3D best-card, ranked cards with reasons, caps, payments, planner and reconciliation demos | `web/index.html` |
 
 Card rules are **illustrative approximations** of popular Indian cards, not read from issuer T&Cs. Every card says so (`confidence`, `source`,
 `verified_on` in `data/cards.json`), the API returns it, and the UI shows it under every recommendation. Offers are illustrative too.
@@ -63,10 +96,10 @@ previous release after re-validating it and checking its content hash. What it d
 issuer feeds) and having a person verify them is the hard part, and the `confidence` / `verified_on` fields are where that review gets recorded.
 
 ```bash
-python -m scruge.rules lint data/cards.json
-python -m scruge.rules diff data/cards.json new.json
-python -m scruge.rules publish new.json --dry-run        # then without --dry-run; --approve-large after review
-python -m scruge.rules rollback                          # back to the previous release
+python -m rewards_engine.rules lint data/cards.json
+python -m rewards_engine.rules diff data/cards.json new.json
+python -m rewards_engine.rules publish new.json --dry-run        # then without --dry-run; --approve-large after review
+python -m rewards_engine.rules rollback                          # back to the previous release
 ```
 
 **How do you save a cap for bigger orders later?** `POST /api/plan` takes a sequence of payments and runs a branch-and-bound search that
@@ -76,7 +109,7 @@ happening now, whether to **hold** a capped card and why. `tests/test_planner.py
 synthetic case (+₹150) and a real-catalog case (+₹650).
 
 **Where do the upcoming payments come from?** From the user, not the caller. `POST /api/users/{id}/plan` forecasts the rest of the statement cycle from the
-user's own ledger (`scruge/forecast.py`): it groups past payments into recurring patterns (merchant, category, channel), takes the average count per completed cycle and the
+user's own ledger (`rewards_engine/forecast.py`): it groups past payments into recurring patterns (merchant, category, channel), takes the average count per completed cycle and the
 **median** amount (so one big payment does not skew it), counts what is already done this cycle so nobody is double counted, and spreads the remaining payments over the
 remaining days so their order, which matters for caps, follows the person's rhythm. It then plans them against the user's stored wallet, stored cap usage and stored offer usage. The forecast and its
 **confidence** (`none` / `low` = this cycle only, extrapolated and capped / `medium` = 1-2 completed cycles / `high` = 3+) come back with the plan, so the advice can be judged: on a
@@ -110,11 +143,11 @@ integer-only response (no float fields, and cheaper to produce); send the legacy
 
 ```bash
 pip install -r requirements-dev.txt
-uvicorn scruge.api:app --reload      # http://127.0.0.1:8000
+uvicorn rewards_engine.api:app --reload      # http://127.0.0.1:8000
 python3 -m pytest -q                 # 211 tests
 ```
 
-Sharing a URL (no database to host; note that wallets, usage and the ledger are lost on every restart): `USER_DB=:memory: uvicorn scruge.api:app` keeps wallets, usage and the ledger in memory, so there is nothing to provision and a restart starts everyone fresh. Run a single process (`--workers 1`), since each worker would hold its own copy. Leave `USER_DB` unset locally to keep data in `data/users.sqlite3`.
+Sharing a URL (no database to host; note that wallets, usage and the ledger are lost on every restart): `USER_DB=:memory: uvicorn rewards_engine.api:app` keeps wallets, usage and the ledger in memory, so there is nothing to provision and a restart starts everyone fresh. Run a single process (`--workers 1`), since each worker would hold its own copy. Leave `USER_DB` unset locally to keep data in `data/users.sqlite3`.
 
 Also: `effective_from` / `effective_to` on rules (a payment carries an optional `on` date and is priced with the rules in force that day), `POST /api/compare/routes` (Checkout vs Card vs Tap vs UPI, including a plain bank account on UPI), `POST /api/compare/prices` (same product across marketplaces, ranked by price after reward and offer), `POST /api/users/{id}/statement` (CSV statement import, bad rows listed with line numbers), and an upper bound on every paise field so no integer can cause a 500.
 

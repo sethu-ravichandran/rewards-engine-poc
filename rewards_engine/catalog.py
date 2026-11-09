@@ -26,7 +26,7 @@ from .channels import ONLINE_ONLY, TAP_LIMIT_PAISE
 from .mcc import MCC_CATEGORIES, category_for
 from .models import Card, Channel, EarnRule, Network
 
-log = logging.getLogger("scruge.catalog")
+log = logging.getLogger("rewards_engine.catalog")
 
 DEFAULT_PATH = Path(os.environ.get("RULES_PATH") or Path(__file__).resolve().parent.parent / "data" / "cards.json")
 

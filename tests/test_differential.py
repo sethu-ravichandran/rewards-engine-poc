@@ -10,10 +10,10 @@ from dataclasses import fields
 
 import pytest
 
-from scruge import engine as cur
-from scruge.catalog import load_cards
-from scruge.mcc import MCC_CATEGORIES
-from scruge.models import Card, Channel, CycleState, EarnRule, Network, Transaction
+from rewards_engine import engine as cur
+from rewards_engine.catalog import load_cards
+from rewards_engine.mcc import MCC_CATEGORIES
+from rewards_engine.models import Card, Channel, CycleState, EarnRule, Network, Transaction
 from tests import reference_engine as ref
 
 SEED = 20240607

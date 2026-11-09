@@ -3,8 +3,8 @@ import json
 
 import pytest
 
-from scruge.models import Channel, Transaction
-from scruge.offers import OfferBook, OfferError
+from rewards_engine.models import Channel, Transaction
+from rewards_engine.offers import OfferBook, OfferError
 from tests.conftest import body
 
 W = ["amazon_icici", "hdfc_swiggy", "hdfc_infinia", "sbi_cashback"]
@@ -27,7 +27,7 @@ def test_checkout_differs_from_card_and_tap_because_offers_are_online_only(make_
     online = c.post("/api/optimize", json=req(6000, "amazon", "5311", "online", include_offers=True)).json()
     card = c.post("/api/optimize", json=req(6000, "amazon", "5311", "card", include_offers=True)).json()
     tap = c.post("/api/optimize", json=req(6000, "amazon", "5311", "tap", include_offers=True)).json()
-    # HDFC cards get 10% off on Amazon above Rs 5,000, but only on the Checkout agent. Swiggy HDFC also earns
+    # HDFC cards get 10% off on Amazon above Rs 5,000, but only on the Checkout route. Swiggy HDFC also earns
     # 5% on online department stores, so it beats Infinia once the offer is added.
     assert online["best"]["card_id"] == "hdfc_swiggy" and online["best"]["offer"]["id"] == "hdfc_amazon_10"
     assert card["best"]["card_id"] == tap["best"]["card_id"] == "amazon_icici"
@@ -141,9 +141,9 @@ def test_persistent_commits_track_offer_usage_per_user_per_cycle(make_client):
 
 
 def test_the_planner_knows_an_offer_will_run_out():
-    from scruge.catalog import load_cards
-    from scruge.models import Channel, Transaction
-    from scruge.planner import plan
+    from rewards_engine.catalog import load_cards
+    from rewards_engine.models import Channel, Transaction
+    from rewards_engine.planner import plan
     cards = [load_cards()["amazon_icici"]]       # a card whose own reward the voucher beats
     book = OfferBook.load()
     txns = [Transaction(150_000, "5814", Channel.ONLINE, "swiggy")] * 3

@@ -1,7 +1,7 @@
 """The rules data itself: a rule that can never pay is a data bug."""
-from scruge.catalog import load_cards
-from scruge.engine import evaluate
-from scruge.models import Channel, Transaction
+from rewards_engine.catalog import load_cards
+from rewards_engine.engine import evaluate
+from rewards_engine.models import Channel, Transaction
 
 
 def test_no_rule_pays_less_than_its_cards_base_rate():

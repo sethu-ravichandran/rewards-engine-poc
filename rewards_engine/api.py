@@ -1,4 +1,4 @@
-"""HTTP API + UI host. Run: uvicorn scruge.api:app --reload
+"""HTTP API + UI host. Run: uvicorn rewards_engine.api:app --reload
 
 Core routes live here (rules, optimize, batch, commit, offers, health, the UI). The per-user, planning and
 reconciliation routes are in user_routes.py; request bodies in schemas.py; validation and response shaping
@@ -49,7 +49,7 @@ from .userstore import IdempotencyConflict, UserStore
 
 WEB = Path(__file__).resolve().parent.parent / "web"
 JSON = "application/json"
-log = logging.getLogger("scruge.api")
+log = logging.getLogger("rewards_engine.api")
 
 
 def _accepts_gzip(request: Request) -> bool:
@@ -83,7 +83,7 @@ def create_app(settings: Settings | None = None, rules_path: str | Path | None =
     users = UserStore(cfg.user_db or default_db)
     P = Presenter(cfg, offers)
 
-    app = FastAPI(title="Scruge Rewards Optimizer (PoC)")
+    app = FastAPI(title="Rewards Engine (PoC)")
 
     @app.exception_handler(RequestValidationError)
     async def _invalid(_: Request, exc: RequestValidationError) -> Response:

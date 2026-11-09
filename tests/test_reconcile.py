@@ -1,8 +1,8 @@
 """Reward reconciliation: predicted vs credited, with a diagnosis for every mismatch."""
 from datetime import datetime
 
-from scruge.catalog import load_cards
-from scruge.reconcile import Credit, Expected, diagnose, reconcile, tolerance
+from rewards_engine.catalog import load_cards
+from rewards_engine.reconcile import Credit, Expected, diagnose, reconcile, tolerance
 from tests.conftest import body
 
 CARDS = load_cards()

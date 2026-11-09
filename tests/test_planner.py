@@ -1,11 +1,11 @@
 """Cap-aware lookahead: never worse than greedy, proven optimal on small cases, honest about its limits."""
 import random
 
-from scruge.catalog import load_cards
-from scruge.engine import commit, evaluate
-from scruge.models import Card, Channel, CycleState, EarnRule, Network, Transaction
-from scruge.offers import OfferBook
-from scruge.planner import first_move_advice, plan
+from rewards_engine.catalog import load_cards
+from rewards_engine.engine import commit, evaluate
+from rewards_engine.models import Card, Channel, CycleState, EarnRule, Network, Transaction
+from rewards_engine.offers import OfferBook
+from rewards_engine.planner import first_move_advice, plan
 from tests.conftest import body
 
 X = Card("x", "Card X", Network.VISA, 100,

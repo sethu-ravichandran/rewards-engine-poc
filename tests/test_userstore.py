@@ -3,7 +3,7 @@ import threading
 
 import pytest
 
-from scruge.userstore import UserStore, current_cycle
+from rewards_engine.userstore import UserStore, current_cycle
 from tests.conftest import body
 
 UID = "user-store-01"
@@ -125,7 +125,7 @@ def test_replay_with_a_different_body_is_a_409_like_the_stateless_path(make_clie
 def test_old_databases_without_fingerprints_are_migrated_and_still_replay(tmp_path):
     import sqlite3
 
-    from scruge.userstore import SCHEMA
+    from rewards_engine.userstore import SCHEMA
     path = tmp_path / "old.sqlite3"
     db = sqlite3.connect(path)
     db.executescript(SCHEMA.replace(", fingerprint TEXT,", ","))          # the schema as it was before this column existed

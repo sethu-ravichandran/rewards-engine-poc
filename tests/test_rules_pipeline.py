@@ -5,8 +5,8 @@ from datetime import date
 
 import pytest
 
-from scruge import rules
-from scruge.catalog import rules_version
+from rewards_engine import rules
+from rewards_engine.catalog import rules_version
 from tests.conftest import DATA
 
 LIVE = json.loads(DATA.read_text())

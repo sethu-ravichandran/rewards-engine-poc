@@ -16,8 +16,8 @@ import time
 from typing import Callable
 
 request_id_var: contextvars.ContextVar[str] = contextvars.ContextVar("request_id", default="-")
-access_log = logging.getLogger("scruge.access")
-log = logging.getLogger("scruge")
+access_log = logging.getLogger("rewards_engine.access")
+log = logging.getLogger("rewards_engine")
 _RID = re.compile(r"^[A-Za-z0-9._-]{1,64}$")
 
 
@@ -34,19 +34,19 @@ class JsonFormatter(logging.Formatter):
 
 
 def configure_logging(level: str = "INFO") -> None:
-    root = logging.getLogger("scruge")
+    root = logging.getLogger("rewards_engine")
     root.setLevel(level.upper())
     # Access lines are already JSON (see EdgeMiddleware); pass them through instead of re-encoding.
-    acc = logging.getLogger("scruge.access")
+    acc = logging.getLogger("rewards_engine.access")
     if not acc.handlers:
         ah = logging.StreamHandler(sys.stderr)
         ah.setFormatter(logging.Formatter("%(message)s"))
         acc.addHandler(ah)
         acc.propagate = False
-    if not any(getattr(h, "_scruge", False) for h in root.handlers):
+    if not any(getattr(h, "_rewards_engine", False) for h in root.handlers):
         h = logging.StreamHandler(sys.stderr)
         h.setFormatter(JsonFormatter())
-        h._scruge = True  # type: ignore[attr-defined]
+        h._rewards_engine = True  # type: ignore[attr-defined]
         root.addHandler(h)
         root.propagate = False
 
@@ -110,7 +110,7 @@ class EdgeMiddleware:
         finally:
             dur = time.perf_counter() - t0
             if self.access and access_log.isEnabledFor(logging.INFO):
-                access_log.info('{"ts":%.3f,"level":"INFO","logger":"scruge.access","request_id":"%s","method":"%s",'
+                access_log.info('{"ts":%.3f,"level":"INFO","logger":"rewards_engine.access","request_id":"%s","method":"%s",'
                                 '"path":%s,"status":%d,"dur_ms":%.3f}' % (
                                     time.time(), rid, scope["method"], json.dumps(path), status, dur * 1000))
             request_id_var.reset(token)

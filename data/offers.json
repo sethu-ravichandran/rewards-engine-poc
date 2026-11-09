@@ -1,5 +1,5 @@
 {
-  "_note": "Illustrative merchant and bank offers for the Checkout agent. Not live offers; shaped like real ones (instant discount / voucher with a cap and a minimum order). Offers are instant discounts, so they are separate from card rewards, which are credited later. cap_paise limits one payment; cycle_cap_paise limits what one user can get from the offer in a statement cycle.",
+  "_note": "Illustrative merchant and bank offers for the Checkout route. Not live offers; shaped like real ones (instant discount / voucher with a cap and a minimum order). Offers are instant discounts, so they are separate from card rewards, which are credited later. cap_paise limits one payment; cycle_cap_paise limits what one user can get from the offer in a statement cycle.",
   "offers": [
     {
       "id": "swiggy_voucher_6",
@@ -17,7 +17,7 @@
       "discount_bps": 600,
       "cap_paise": 30000,
       "min_txn_paise": 20000,
-      "source": "Scruge Checkout voucher partner (illustrative)",
+      "source": "Voucher partner (illustrative)",
       "verified_on": null,
       "confidence": "illustrative",
       "cycle_cap_paise": 60000
@@ -145,7 +145,7 @@
       "discount_bps": 300,
       "cap_paise": 10000,
       "min_txn_paise": 50000,
-      "source": "Scruge UPI partner (illustrative)",
+      "source": "UPI partner (illustrative)",
       "verified_on": null,
       "confidence": "illustrative",
       "cycle_cap_paise": 30000

@@ -9,4 +9,4 @@ dependencies = [
 ]
 
 [tool.vercel]
-entrypoint = "scruge.api:app"
+entrypoint = "rewards_engine.api:app"

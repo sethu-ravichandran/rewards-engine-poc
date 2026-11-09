@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-from scruge.catalog import CatalogError, CatalogStore, rules_version, validate_catalog
+from rewards_engine.catalog import CatalogError, CatalogStore, rules_version, validate_catalog
 from tests.conftest import DATA, body, write_rules
 
 

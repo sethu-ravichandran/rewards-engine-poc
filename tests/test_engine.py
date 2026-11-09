@@ -1,7 +1,7 @@
 import pytest
 
-from scruge import Channel, CycleState, Transaction, commit, evaluate, optimize
-from scruge.catalog import load_cards
+from rewards_engine import Channel, CycleState, Transaction, commit, evaluate, optimize
+from rewards_engine.catalog import load_cards
 
 CARDS = load_cards()
 ALL = list(CARDS.values())

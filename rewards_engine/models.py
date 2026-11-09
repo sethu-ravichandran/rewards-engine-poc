@@ -11,11 +11,11 @@ from typing import Sequence
 
 
 class Channel(str, Enum):
-    """How the payment is made. Maps to Scruge's four agents."""
-    ONLINE = "online"      # Checkout agent: card-not-present
-    CARD = "card"          # Card agent: POS swipe / dip
-    TAP = "tap"            # Tap agent: contactless NFC
-    UPI = "upi"            # UPI agent: RuPay credit card on UPI
+    """How the payment is made. The four ways to pay."""
+    ONLINE = "online"      # Checkout route: card-not-present
+    CARD = "card"          # Card route: POS swipe / dip
+    TAP = "tap"            # Tap route: contactless NFC
+    UPI = "upi"            # UPI route: RuPay credit card on UPI
 
 
 class Network(str, Enum):

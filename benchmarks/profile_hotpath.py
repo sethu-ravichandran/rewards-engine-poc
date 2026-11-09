@@ -19,7 +19,7 @@ from pathlib import Path
 
 ap = argparse.ArgumentParser()
 ap.add_argument("--app-dir", default=str(Path(__file__).resolve().parent.parent))
-ap.add_argument("--app", default="scruge.api:app")
+ap.add_argument("--app", default="rewards_engine.api:app")
 ap.add_argument("--n", type=int, default=20000)
 ap.add_argument("--cprofile", action="store_true")
 ap.add_argument("--paise", action="store_true", help="send amount_paise/cycle_usage_paise (lean response) instead of the legacy rupee fields")

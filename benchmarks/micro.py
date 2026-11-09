@@ -17,9 +17,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from scruge import engine as cur  # noqa: E402
-from scruge.catalog import load_cards  # noqa: E402
-from scruge.models import Channel, CycleState, Transaction  # noqa: E402
+from rewards_engine import engine as cur  # noqa: E402
+from rewards_engine.catalog import load_cards  # noqa: E402
+from rewards_engine.models import Channel, CycleState, Transaction  # noqa: E402
 from tests import reference_engine as ref  # noqa: E402
 
 CARDS = load_cards()

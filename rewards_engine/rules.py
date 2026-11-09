@@ -1,4 +1,4 @@
-"""Rules pipeline: get card rules in, reviewed, live, and back out. CLI: python -m scruge.rules ...
+"""Rules pipeline: get card rules in, reviewed, live, and back out. CLI: python -m rewards_engine.rules ...
 
   build DIR           merge one-file-per-card (DIR/*.json) into one rules file
   lint FILE           structure errors; provenance and sanity warnings
@@ -289,7 +289,7 @@ def _print_issues(issues: list[dict]) -> None:
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="python -m scruge.rules", description=__doc__.split("\n")[0])
+    ap = argparse.ArgumentParser(prog="python -m rewards_engine.rules", description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     b = sub.add_parser("build"); b.add_argument("dir"); b.add_argument("-o", "--out", required=True); b.add_argument("--note", default="")
     l = sub.add_parser("lint"); l.add_argument("file")

@@ -1,7 +1,7 @@
 """Forecast the rest of the cycle from a user's own history; plan it without the caller supplying payments."""
 from datetime import datetime, timezone
 
-from scruge.forecast import forecast
+from rewards_engine.forecast import forecast
 from tests.conftest import body
 
 NOV10 = datetime(2026, 11, 10, 12, tzinfo=timezone.utc)      # 20 of 30 days remain (2/3 of the cycle)

@@ -5,9 +5,9 @@ import logging
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
-from scruge.api import OptimizeIn, create_app
-from scruge.config import Settings
-from scruge.obs import JsonFormatter
+from rewards_engine.api import OptimizeIn, create_app
+from rewards_engine.config import Settings
+from rewards_engine.obs import JsonFormatter
 from tests.conftest import body
 
 
@@ -72,7 +72,7 @@ def test_there_is_no_metrics_endpoint_or_result_cache(make_client):
 
 def test_unhandled_error_is_generic_500_without_stack_trace(make_client, monkeypatch):
     c = make_client()
-    import scruge.api as api
+    import rewards_engine.api as api
 
     def boom(*a, **k):
         raise RuntimeError("secret internal detail /etc/passwd")
@@ -81,11 +81,11 @@ def test_unhandled_error_is_generic_500_without_stack_trace(make_client, monkeyp
     records = []
     h = logging.Handler()
     h.emit = records.append
-    logging.getLogger("scruge").addHandler(h)
+    logging.getLogger("rewards_engine").addHandler(h)
     try:
         r = client.post("/api/optimize", json=body())
     finally:
-        logging.getLogger("scruge").removeHandler(h)
+        logging.getLogger("rewards_engine").removeHandler(h)
     assert r.status_code == 500
     assert r.json()["detail"] == "internal server error" and r.json()["request_id"] == r.headers["x-request-id"]
     assert "secret" not in r.text and "Traceback" not in r.text
@@ -94,10 +94,10 @@ def test_unhandled_error_is_generic_500_without_stack_trace(make_client, monkeyp
 
 
 def test_json_log_formatter_includes_request_id():
-    from scruge.obs import request_id_var
+    from rewards_engine.obs import request_id_var
     tok = request_id_var.set("rid-1")
     try:
-        rec = logging.LogRecord("scruge.x", logging.WARNING, "f", 1, "hello %s", ("w",), None)
+        rec = logging.LogRecord("rewards_engine.x", logging.WARNING, "f", 1, "hello %s", ("w",), None)
         out = json.loads(JsonFormatter().format(rec))
     finally:
         request_id_var.reset(tok)
@@ -109,11 +109,11 @@ def test_access_log_is_json_with_request_id(rules_file):
     app = create_app(Settings(rules_watch_interval_s=0, access_log=True), rules_path=rules_file)
     buf = io.StringIO()
     h = logging.StreamHandler(buf)
-    logging.getLogger("scruge.access").addHandler(h)
+    logging.getLogger("rewards_engine.access").addHandler(h)
     try:
         r = TestClient(app).get("/healthz")
     finally:
-        logging.getLogger("scruge.access").removeHandler(h)
+        logging.getLogger("rewards_engine.access").removeHandler(h)
     d = json.loads(buf.getvalue().splitlines()[-1])
     assert d["request_id"] == r.headers["x-request-id"] and d["path"] == "/healthz" and d["status"] == 200
 

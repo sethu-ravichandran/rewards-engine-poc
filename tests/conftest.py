@@ -5,8 +5,8 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from scruge.api import create_app
-from scruge.config import Settings
+from rewards_engine.api import create_app
+from rewards_engine.config import Settings
 
 DATA = Path(__file__).resolve().parent.parent / "data" / "cards.json"
 WALLET = ["amazon_icici", "hdfc_swiggy", "hdfc_infinia"]

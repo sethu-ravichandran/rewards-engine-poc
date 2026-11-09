@@ -4,7 +4,7 @@
     python3 benchmarks/loadtest.py --workers 4 --distinct 20
     python3 benchmarks/loadtest.py --app-dir /path/to/old/checkout   # benchmark another tree
 
-Starts `uvicorn scruge.api:app` (own port, never 8000), then drives it from CLIENT processes
+Starts `uvicorn rewards_engine.api:app` (own port, never 8000), then drives it from CLIENT processes
 using a minimal stdlib asyncio HTTP/1.1 keep-alive client (httpx would be the bottleneck at these
 rates). Reports requests/s and p50/p95/p99 latency. --distinct controls how many different request
 bodies are cycled.
@@ -97,7 +97,7 @@ def main() -> None:
     ap.add_argument("--distinct", type=int, default=50)
     ap.add_argument("--port", type=int, default=8101)
     ap.add_argument("--path", default="/api/optimize")
-    ap.add_argument("--app", default="scruge.api:app")
+    ap.add_argument("--app", default="rewards_engine.api:app")
     ap.add_argument("--app-dir", default=str(ROOT))
     ap.add_argument("--paise", action="store_true", help="send amount_paise/cycle_usage_paise (lean responses), as the app does")
     ap.add_argument("--offers", action="store_true", help="include_offers=true, as the app sends")

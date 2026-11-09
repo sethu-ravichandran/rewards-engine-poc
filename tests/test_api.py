@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from scruge.api import app
+from rewards_engine.api import app
 
 client = TestClient(app)
 WALLET = ["amazon_icici", "hdfc_swiggy", "hdfc_infinia"]

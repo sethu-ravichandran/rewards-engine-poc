@@ -1,8 +1,8 @@
 """Channel rules and guidance: Tap and Card are different agents, impossible payments are said to be impossible,
 and a payment that loses money comes with advice."""
-from scruge.catalog import load_cards
-from scruge.channels import TAP_LIMIT_PAISE, block_reason, guidance
-from scruge.models import Channel, Transaction
+from rewards_engine.catalog import load_cards
+from rewards_engine.channels import TAP_LIMIT_PAISE, block_reason, guidance
+from rewards_engine.models import Channel, Transaction
 from tests.conftest import body
 
 W = ["amazon_icici", "hdfc_swiggy", "hdfc_infinia", "sbi_cashback", "tata_neu_rupay"]

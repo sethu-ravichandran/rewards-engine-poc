@@ -3,7 +3,7 @@ import json
 
 import pytest
 
-from scruge.catalog import CatalogError, card_from_dict, card_on, validate_catalog
+from rewards_engine.catalog import CatalogError, card_from_dict, card_on, validate_catalog
 from tests.conftest import body
 
 W = ["sbi_cashback", "amazon_icici", "hdfc_swiggy", "hdfc_infinia", "tata_neu_rupay"]
@@ -134,7 +134,7 @@ def test_legacy_float_usage_never_500s(make_client):
 def test_diff_sees_dated_versions_and_scheduled_changes():
     import copy
 
-    from scruge import rules
+    from rewards_engine import rules
     live = json.loads(open("data/cards.json").read())
     new = copy.deepcopy(live)
     sw = next(k for k in new["cards"] if k["id"] == "hdfc_swiggy")

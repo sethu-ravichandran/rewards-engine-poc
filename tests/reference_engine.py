@@ -1,4 +1,4 @@
-# FROZEN COPY of the original scruge/engine.py (pre-optimisation). Do not edit: it is the oracle for
+# FROZEN COPY of the original rewards_engine/engine.py (pre-optimisation). Do not edit: it is the oracle for
 # tests/test_differential.py and the 'before' side of benchmarks/micro.py.
 """Rewards optimizer engine.
 
@@ -19,8 +19,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-from scruge.mcc import category_for
-from scruge.models import Card, CycleState, EarnRule, Transaction
+from rewards_engine.mcc import category_for
+from rewards_engine.models import Card, CycleState, EarnRule, Transaction
 
 
 @dataclass(frozen=True)

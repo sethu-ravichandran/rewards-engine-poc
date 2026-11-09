@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SC₹UGE · Pay smarter</title>
+<title>Rewards Engine · best card for every payment</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script>document.documentElement.classList.add("js")</script>
 <style>
-/* Tokens follow scruge.in: warm canvas, near-black, one green for savings, one red for fees */
+/* Tokens: warm canvas, near-black, one green for savings, one red for fees */
 :root{
   --canvas:#F9F5F1; --primary:#050506; --secondary:#28323D; --card:#fff; --muted:#6B665F;
   --line:rgba(40,50,61,.12); --line-dark:rgba(255,255,255,.12);
@@ -109,7 +109,7 @@ h1{font:600 clamp(30px,3.9vw,40px)/1.1 var(--font);letter-spacing:-.025em;max-wi
 .btn.ghost{background:transparent;color:var(--primary);border:1px solid var(--primary);padding:11px 22px}
 .btn.ghost:hover{background:var(--button);color:#fff}
 
-/* dark panels, white rows (the scruge.in motif) */
+/* dark panels, white rows */
 .dark{background:var(--primary);color:#fff;border-radius:var(--r-lg);padding:24px}
 .dark h2,.dark h3{font:600 clamp(20px,2.4vw,24px)/1.2 var(--font);letter-spacing:-.015em}
 .agents{margin-top:16px;position:relative;min-height:236px}
@@ -271,7 +271,7 @@ code{background:#efe9e2;padding:1px 6px;border-radius:5px}
 .sweep.go{animation:sweepgo .75s var(--ease)}
 @keyframes sweepgo{0%{opacity:1;transform:translateX(-100%)}85%{opacity:1}100%{opacity:0;transform:translateX(100%)}}
 
-/* four agents: sliding highlight, one-shot ring */
+/* ways to pay: sliding highlight, one-shot ring */
 .agent{position:relative;z-index:1}
 .agent-hl{position:absolute;left:-12px;right:-12px;top:0;height:var(--h,56px);border-radius:12px;background:rgba(255,255,255,.075);transform:translateY(var(--y,0px));pointer-events:none;opacity:0}
 .agents.ready .agent-hl{opacity:1;transition:transform .55s var(--spring),height .3s var(--ease),opacity .4s}
@@ -407,16 +407,16 @@ footer #lat{display:inline-block;margin-left:10px;padding-left:10px;border-left:
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="nav"><div class="wrap">
-  <a class="logo" href="/" aria-label="Scruge">SC<span class="r">₹</span>UGE</a>
-  <span class="pill nav-note">Unofficial proof of work by Sethu Ravichandran</span>
+  <a class="logo" href="/" aria-label="Rewards Engine">Rewards<span class="r">₹</span>Engine</a>
+  <span class="pill nav-note">Built by Sethu Ravichandran</span>
   </div></header>
 
 <main class="wrap" id="main">
   <p class="sr" id="srStatus" role="status" aria-live="polite"></p>
   <section class="hero">
-    <p class="eyebrow g rv" style="--d:60ms">Rewards / Convenience / Transparency</p>
+    <p class="eyebrow g rv" style="--d:60ms">Cards / UPI / Offers</p>
     <h1><span class="hw"><span style="--i:0">The</span></span> <span class="hw"><span style="--i:1">right</span></span> <span class="hw"><span style="--i:2">card</span></span> <span class="hw"><span style="--i:3">for</span></span> <span class="hw hl g"><span style="--i:4">every</span></span> <span class="hw hl g"><span style="--i:5">payment</span></span></h1>
-    <p class="lede rv" style="--d:560ms">Pick a merchant and an amount. We find the card, the UPI route or the offer that keeps the most rupees with you, and show exactly why. No points, only rupees.</p>
+    <p class="lede rv" style="--d:560ms">Pick a merchant and an amount. We find the card, the UPI route or the offer that keeps the most rupees with you, and show exactly why. Every figure is in rupees.</p>
   </section>
 
   <section class="card wallet-card rv" style="--d:300ms">
@@ -453,9 +453,9 @@ footer #lat{display:inline-block;margin-left:10px;padding-left:10px;border-left:
 
     <div class="col">
       <section class="dark rv" id="agentsP" style="--d:100ms"><i class="sweep"></i>
-        <p class="eyebrow g">Four agents</p>
-        <h2 style="margin-top:10px">What each agent would pay with</h2>
-        <div class="agents" id="agents" role="radiogroup" aria-label="Payment agent"></div>
+        <p class="eyebrow g">Four ways to pay</p>
+        <h2 style="margin-top:10px">What each way of paying would choose</h2>
+        <div class="agents" id="agents" role="radiogroup" aria-label="Way to pay"></div>
         <div class="sofar"><span class="eyebrow">Rewards so far</span><b id="sofar">₹0</b></div>
       </section>
 
@@ -528,7 +528,7 @@ function markHTML(id) {
   return "";
 }
 const TOP = ["amazon", "swiggy", "zomato", "bigbasket", "croma", "indian_oil", "rent", "smartbuy_hotels"];
-const AGENTS = [["online", "Checkout", "Buys for you"], ["card", "Card", "Card copilot"], ["tap", "Tap", "Card in stores"], ["upi", "UPI", "UPI anywhere"]];
+const AGENTS = [["online", "Checkout", "Online"], ["card", "Card", "Swipe or insert"], ["tap", "Tap", "Contactless"], ["upi", "UPI", "UPI on RuPay"]];
 const NET = {
   visa: '<span class="net visa">VISA</span>', rupay: '<span class="net rupay">RuPay</span>',
   mastercard: '<span class="net mc"><i></i><i></i></span>', diners: '<span class="net diners"><i></i><i></i></span>',
@@ -724,7 +724,7 @@ function buildMerchants() {
   document.querySelectorAll(".q").forEach(b => b.onclick = () => setAmount(+b.dataset.n));
 }
 const STORE_FIRST = new Set(["dmart", "local_kirana", "apollo", "indian_oil"]);   // places you stand at a counter
-function autoChannel(id) {              // picking a merchant picks the sensible way to pay there, so the hero is not about the wrong agent
+function autoChannel(id) {              // picking a merchant picks the sensible way to pay there, so the hero is not about the wrong route
   const m = state.meta.merchants.find(x => x.id === id);
   if (m && m.online_only && (state.channel === "card" || state.channel === "tap")) setChannel("online", true);
   else if (STORE_FIRST.has(id) && state.channel === "online") setChannel("card", true);
@@ -743,7 +743,7 @@ function setChannel(ch, silent) {
   state.channel = ch;
   document.querySelectorAll(".agent").forEach(b => { const on = b.dataset.ch === ch; b.setAttribute("aria-checked", on); b.tabIndex = on ? 0 : -1; });
   positionHL();
-  const agent = AGENTS.find(a => a[0] === ch); if ($("#heroFor") && agent) $("#heroFor").textContent = `Best card · ${agent[1]} agent`;
+  const agent = AGENTS.find(a => a[0] === ch); if ($("#heroFor") && agent) $("#heroFor").textContent = `Best card · ${agent[1]}`;
   if (!silent) refresh();
 }
 
@@ -829,7 +829,7 @@ function renderVerdict(best, ranked, advice) {
   const v = $("#verdict"), amt = $("#heroAmt"), nm = $("#vname");
   if (!best) {
     state.bestId = null; setProv(null); v.classList.remove("zero"); nm.className = ""; swapText(nm, advice.length ? "Not possible this way" : "No card works here"); setMbar(advice.length ? "Not possible this way" : "No card works", "", false); amt.setAttribute("aria-hidden", "true"); clearAmt(amt); renderBestCard(null);
-    swapText($("#heroDelta"), advice[0] || "None of the cards in your wallet can pay this way. Try another agent."); $("#heroWhy").innerHTML = ""; $("#count").textContent = "All cards"; return;
+    swapText($("#heroDelta"), advice[0] || "None of the cards in your wallet can pay this way. Try another way to pay."); $("#heroWhy").innerHTML = ""; $("#count").textContent = "All cards"; return;
   }
   const zero = val(best) <= 0, changed = best.card_id !== state.bestId;
   v.classList.toggle("zero", zero); amt.setAttribute("aria-hidden", zero); if (zero) clearAmt(amt);
@@ -1078,7 +1078,7 @@ async function simulate() {
 
 const merchantName = id => (state.meta.merchants.find(m => m.id === id) || {}).name;
 function getUid() {
-  try { let u = localStorage.getItem("scruge_uid"); if (!u) { u = crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : (Math.random().toString(16).slice(2) + "0".repeat(24)).slice(0, 24); localStorage.setItem("scruge_uid", u); } return u; }
+  try { let u = localStorage.getItem("rewards_uid"); if (!u) { u = crypto.randomUUID ? crypto.randomUUID().replace(/-/g, "") : (Math.random().toString(16).slice(2) + "0".repeat(24)).slice(0, 24); localStorage.setItem("rewards_uid", u); } return u; }
   catch { return "anon" + (Math.random().toString(16).slice(2) + "0".repeat(24)).slice(0, 20); }
 }
 function rowToEntry(r) {
@@ -1103,7 +1103,7 @@ async function init() {
   $("#saveNote").textContent = state.sync ? "Your wallet and payments are saved for this browser. " : "";
   loadItems();
   buildWallet(); buildAgents(); buildMerchants(); buildGauges(); renderTape(null, true);
-  setChannel(state.channel, true);          // sets the hero label for the starting agent
+  setChannel(state.channel, true);          // sets the hero label for the starting route
   $("#agents").addEventListener("keydown", e => {            // arrow keys move between agents
     if (!["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) return;
     const i = AGENTS.findIndex(a => a[0] === state.channel), n = (i + (["ArrowDown", "ArrowRight"].includes(e.key) ? 1 : AGENTS.length - 1)) % AGENTS.length;
